@@ -32,7 +32,9 @@ const DownloadProgress: React.FC<DownloadProgressProps> = ({
     // Dynamically import socket.io-client
     const loadSocket = async () => {
       const { io } = await import('socket.io-client');
-      socket = io('http://localhost:4000', {
+      // Use environment variable for backend URL in production, localhost for development
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
+      socket = io(backendUrl, {
         query: { socketId: socketId }
       }); // Use the same port as your backend
 
