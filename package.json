@@ -1,0 +1,30 @@
+{
+  "name": "yt-demo-download-2",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "author": "Abdulhadi",
+  "description": "Tublyx - Free Video Downloader for 1000+ Platforms. Fast, secure, and completely free.",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "build:dev": "cd frontend && npm run build:dev",
+    "lint": "cd frontend && npm run lint",
+    "preview": "cd frontend && npm run preview",
+    "start:backend": "cd backend && npm start",
+    "start": "cd backend && npm start",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.3"
+  }
+}
