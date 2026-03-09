@@ -29,10 +29,13 @@ export interface VideoInfo {
  */
 export const fetchVideoInfo = (url: string): Promise<VideoInfo> => {
   return new Promise((resolve, reject) => {
-    console.log('yt-dlp-utils: Attempting to fetch video info for URL:', url);
-    const ytDlpPath = path.join(__dirname, '../../yt-dlp.exe');
+   console.log('yt-dlp-utils: Attempting to fetch video info for URL:', url);
+    // Use 'yt-dlp' command directly (works on both Windows and Linux)
+   const ytDlpPath = process.platform === 'win32' 
+      ? path.join(__dirname, '../../yt-dlp.exe')
+      : 'yt-dlp';
     // Get comprehensive format information with best quality options
-    const ytDlp = spawn(ytDlpPath, ['--dump-json', '--list-formats', url]);
+   const ytDlp = spawn(ytDlpPath, ['--dump-json', '--list-formats', url]);
     let data = '';
     let errorData = '';
 
@@ -129,7 +132,10 @@ export const downloadVideo = (url: string, formatId: string, res: Response, file
   const ytDlpArgs = ['-f', `${formatId}+bestaudio/best`, '--merge-output-format', 'mp4', '--no-cache-dir', '--no-part', '--no-mtime', url, '-o', '-', '--newline'];
   
   console.log('yt-dlp-utils: Spawning yt-dlp for download with args:', ytDlpArgs.join(' '));
-  const ytDlpPath = path.join(__dirname, '../../yt-dlp.exe');
+  // Use 'yt-dlp' command directly (works on both Windows and Linux)
+  const ytDlpPath = process.platform === 'win32' 
+    ? path.join(__dirname, '../../yt-dlp.exe')
+    : 'yt-dlp';
   const ytDlp = spawn(ytDlpPath, ytDlpArgs);
 
   res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
