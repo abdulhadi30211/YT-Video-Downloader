@@ -51,15 +51,17 @@ app.get('/api/playlist-info', async (req, res) => {
   const { id } = req.query;
 
   if (!id || typeof id !== 'string') {
-    return res.status(400).json({ error: 'Missing or invalid playlist ID.' });
+   return res.status(400).json({ error: 'Missing or invalid playlist ID.' });
   }
 
   try {
-    // Use yt-dlp to get playlist info
-    const ytDlpPath = path.join(__dirname, '../../yt-dlp.exe');
-    const playlistUrl = `https://www.youtube.com/playlist?list=${id}`;
+    // Use yt-dlp to get playlist info - cross-platform compatible
+   const ytDlpPath = process.platform === 'win32' 
+      ? path.join(__dirname, '../../yt-dlp.exe')
+      : 'yt-dlp';
+   const playlistUrl = `https://www.youtube.com/playlist?list=${id}`;
     
-    const ytDlp = spawn(ytDlpPath, ['--dump-json', '--flat-playlist', playlistUrl]);
+   const ytDlp = spawn(ytDlpPath, ['--dump-json', '--flat-playlist', playlistUrl]);
     
     let data = '';
     let errorData = '';
@@ -138,8 +140,8 @@ app.get('/api/playlist-info', async (req, res) => {
       }
     });
   } catch (error: any) {
-    console.error('Error fetching playlist info:', error);
-    res.status(500).json({ error: error.message });
+   console.error('Error fetching playlist info:', error);
+   res.status(500).json({ error: error.message });
   }
 });
 
@@ -160,7 +162,6 @@ app.get('/api/universal-info', async (req, res) => {
   }
 });
 
-// Endpoint to download video/audio
 // Endpoint for universal video download
 app.get('/api/universal-download', (req, res) => {
   const { url, formatId, filename } = req.query;
