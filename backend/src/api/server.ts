@@ -22,10 +22,10 @@ function formatDuration(seconds: number): string {
 }
 
 const app = express();
-const port = 4000; // Backend will run on port 4000
+const port = parseInt(process.env.PORT || '4000', 10); // Use environment variable or default to 4000
 
 app.use(cors({
-  origin: '*', // Allow requests from any origin
+  origin: process.env.CORS_ORIGIN || '*', // Use environment variable for CORS in production
 }));
 app.use(express.json());
 
